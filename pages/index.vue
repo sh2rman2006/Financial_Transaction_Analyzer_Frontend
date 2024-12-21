@@ -2,7 +2,6 @@
 // definePageMeta({
 //   middleware: `auth`
 // })
-
 const { $axios } = useNuxtApp();
 </script>
 
