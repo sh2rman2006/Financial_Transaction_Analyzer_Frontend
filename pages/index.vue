@@ -1,7 +1,9 @@
 <script setup>
-definePageMeta({
-  middleware: `auth`
-})
+// definePageMeta({
+//   middleware: `auth`
+// })
+
+const { $axios } = useNuxtApp();
 </script>
 
 <template>
