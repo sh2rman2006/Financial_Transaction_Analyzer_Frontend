@@ -30,16 +30,28 @@ const submitRegistration = async () => {
 // verify
 const isVerifyForm = ref(false);
 const verifyCode = ref(``);
+const responseStatus = ref(``);
 const submitVerify = async () => {
   await getCsrfToken();
-  await axios.post(
-    `/auth/verify`,
-    {
-      email: registrationForm.email,
-      verificationCode: verifyCode,
-    },
-    { headers: { "X-XSRF-TOKEN": csrfToken.value } }
-  );
+  await axios
+    .post(
+      `/auth/verify`,
+      {
+        email: registrationForm.email,
+        verificationCode: verifyCode.value,
+      },
+      { headers: { "X-XSRF-TOKEN": csrfToken.value } }
+    )
+    .then((response) => {
+      responseStatus.value = ``;
+      // todo: redirect
+    })
+    .catch((e) => {
+      console.log(e);
+      if (e.response.status == 400) {
+        responseStatus.value = `Неверно введен код`;
+      }
+    });
 };
 </script>
 
@@ -47,7 +59,7 @@ const submitVerify = async () => {
   <div class="registration-page">
     <div class="form-container">
       <!-- registration form -->
-      <div class="registration" v-if="false">
+      <div class="registration" v-if="!isVerifyForm">
         <h1 class="title">Создать аккаунт</h1>
         <form @submit.prevent="submitRegistration" class="registration-form">
           <!-- First Name -->
@@ -119,7 +131,7 @@ const submitVerify = async () => {
       </div>
 
       <!-- verify form -->
-      <div class="verify" v-if="true">
+      <div class="verify" v-if="isVerifyForm">
         <h1 class="title">Подтвердите почту</h1>
         <form class="verify-form" @submit.prevent="submitVerify">
           <div class="input-group">
@@ -133,9 +145,9 @@ const submitVerify = async () => {
               class="input-field"
             />
           </div>
-
           <button type="submit" class="submit-btn">Подтвердить</button>
         </form>
+        <p class="response" v-if="responseStatus">{{ responseStatus }}</p>
       </div>
     </div>
   </div>
@@ -234,5 +246,13 @@ const submitVerify = async () => {
 
 .switch-link a:hover {
   text-decoration: underline;
+}
+
+.response {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  margin: 15px 0;
+  color: #333;
+  text-align: center;
 }
 </style>
