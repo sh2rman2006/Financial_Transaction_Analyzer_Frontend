@@ -1,5 +1,6 @@
 <script setup>
 const axios = useNuxtApp().$axios;
+const router = useRouter();
 // csrf
 const csrfToken = ref(``);
 const getCsrfToken = async () => {
@@ -43,8 +44,9 @@ const submitVerify = async () => {
       { headers: { "X-XSRF-TOKEN": csrfToken.value } }
     )
     .then((response) => {
+      sessionStorage.setItem(`jwtToken`, response.data.token)
       responseStatus.value = ``;
-      // todo: redirect
+      router.push("/");
     })
     .catch((e) => {
       console.log(e);

@@ -1,14 +1,13 @@
 <script setup>
-// definePageMeta({
-//   middleware: `auth`
-// })
-const { $axios } = useNuxtApp();
+definePageMeta({
+  middleware: "auth-welcome-page",
+});
+const axios = useNuxtApp().$axios;
+
 </script>
 
 <template>
-  <div>
-    
-  </div>
+  <div>home</div>
 </template>
 
 <style scoped></style>
