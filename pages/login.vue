@@ -1,6 +1,10 @@
 <script setup>
 import Cookies from "js-cookie";
 
+useSeoMeta({
+  title: `login`,
+});
+
 const axios = useNuxtApp().$axios;
 const router = useRouter();
 

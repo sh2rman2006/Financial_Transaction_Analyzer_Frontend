@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.5",
+    "@iconify-json/fluent": "^1.2.11",
+    "@iconify-json/material-symbols": "^1.2.12",
     "@nuxt/fonts": "^0.10.3",
     "@nuxt/icon": "^1.10.2",
     "@nuxt/image": "^1.8.1",

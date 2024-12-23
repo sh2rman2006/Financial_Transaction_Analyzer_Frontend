@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+useSeoMeta({
+  title: `welcome`,
+});
+</script>
 
 <template>
   <div class="welcome-container">
@@ -23,7 +27,8 @@
 </template>
 
 <style scoped>
-body,html {
+body,
+html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
