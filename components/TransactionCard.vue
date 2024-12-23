@@ -26,7 +26,7 @@ const iconByCategory = {
 // Карта иконок для типов транзакций
 const iconByType = {
   CREDIT: "carbon:increase",
-  DEBIT: "carbon:decrease",
+  DEBIT: "carbon:subtract",
   TRANSFER: "carbon:arrows-horizontal",
   FEE: "carbon:chart-pie",
 };
