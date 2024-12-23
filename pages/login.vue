@@ -1,4 +1,6 @@
 <script setup>
+import Cookies from "js-cookie";
+
 const axios = useNuxtApp().$axios;
 const router = useRouter();
 
@@ -25,7 +27,8 @@ const submitLogin = async () => {
       headers: { "X-XSRF-TOKEN": csrfToken.value },
     })
     .then((response) => {
-      sessionStorage.setItem(`jwtToken`, response.data.token);
+      Cookies.set(`jwtToken`, response.data.token);
+      // sessionStorage.setItem(`jwtToken`, response.data.token);
       responseStatus.value = "";
       router.push("/");
     })
@@ -107,7 +110,7 @@ const submitLogin = async () => {
   background-color: white;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
   width: 100%;
   max-width: 400px;
 }
