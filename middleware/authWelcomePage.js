@@ -1,13 +1,20 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { data, error } = await useFetch(
-    "http://localhost:8080/auth/protected"
-  );
-  console.log(error);
-  console.log(error.value);
-
-  if (error) {
-    return navigateTo("/welcome");
+  if (import.meta.server) {
+    return;
   }
 
-  return navigateTo(to.fullPath);
+  const axios = useNuxtApp().$axios;
+  console.log(sessionStorage.getItem("jwtToken"));
+
+  try {
+    await axios.get("/auth/protected", {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("jwtToken")}`,
+      },
+    });
+    return;
+  } catch (error) {
+    return navigateTo("/welcome")
+  }
+  
 });
