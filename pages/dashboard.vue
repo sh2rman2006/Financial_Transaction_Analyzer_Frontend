@@ -39,9 +39,7 @@ onMounted(getTransactionsAtLastMonth);
 
 <style scoped></style> -->
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
 import Chart from "chart.js/auto";
-import { useTransactionsStore } from "./stores/transactionsStore";
 
 definePageMeta({
   middleware: "auth",
