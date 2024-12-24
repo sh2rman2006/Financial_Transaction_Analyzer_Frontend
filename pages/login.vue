@@ -31,8 +31,10 @@ const submitLogin = async () => {
       headers: { "X-XSRF-TOKEN": csrfToken.value },
     })
     .then((response) => {
-      Cookies.set(`jwtToken`, response.data.token);
-      // sessionStorage.setItem(`jwtToken`, response.data.token);
+      Cookies.set(`jwtToken`, response.data.token, {
+        expires: 3, // срок действия в днях (опционально)
+        sameSite: "Strict", // или 'Lax'
+      });
       responseStatus.value = "";
       router.push("/");
     })
