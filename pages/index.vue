@@ -9,7 +9,7 @@ useSeoMeta({
 
 <template>
   <div class="main-container">
-    <section class="hero">
+    <header class="hero">
       <div class="hero-content">
         <h1>Добро пожаловать в Financial Transaction Analyzer</h1>
         <p>
@@ -22,9 +22,9 @@ useSeoMeta({
         <source src="/graphik.mp4" type="video/mp4" />
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
-    </section>
+    </header>
 
-    <section class="features">
+    <main class="features">
       <h2>Наши возможности</h2>
       <div class="features-grid">
         <div class="feature">
@@ -51,11 +51,11 @@ useSeoMeta({
           </p>
         </div>
       </div>
-    </section>
+    </main>
 
-    <section class="footer">
+    <footer class="footer">
       <p>&copy; 2024 Financial Transaction Analyzer. Все права защищены.</p>
-    </section>
+    </footer>
   </div>
 </template>
 
@@ -74,7 +74,6 @@ useSeoMeta({
   background: linear-gradient(to right, #007bff, #00b0ff);
   padding: 60px;
   margin-bottom: 40px;
-  border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   color: white;
   text-align: left;
@@ -184,7 +183,6 @@ useSeoMeta({
   background-color: #007bff;
   color: white;
   margin-top: 40px;
-  border-radius: 8px;
 }
 
 .footer p {
