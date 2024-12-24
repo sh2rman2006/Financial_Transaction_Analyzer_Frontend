@@ -18,7 +18,7 @@ useSeoMeta({
         </p>
         <NuxtLink to="/" class="btn">Перейти в систему</NuxtLink>
       </div>
-      <video class="hero-image" width="700" height="500" autoplay muted loop>
+      <video class="background-video" width="700" height="500" autoplay muted loop>
         <source src="/graphik.mp4" type="video/mp4" />
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
@@ -117,7 +117,7 @@ useSeoMeta({
   color: white;
 }
 
-.hero-image {
+.background-video {
   position: absolute;
   top: 0;
   left: 0;
