@@ -51,8 +51,8 @@ const submitVerify = async () => {
     )
     .then((response) => {
       Cookies.set(`jwtToken`, response.data.token, {
-        expires: 3, // срок действия в днях (опционально)
-        sameSite: "Strict", // или 'Lax'
+        expires: 3,
+        sameSite: "Lax",
       });
       responseStatus.value = ``;
       router.push("/");
