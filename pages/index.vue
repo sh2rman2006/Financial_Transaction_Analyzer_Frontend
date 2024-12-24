@@ -16,7 +16,7 @@ useSeoMeta({
           Анализируйте финансовые транзакции легко и быстро с помощью нашего
           мощного инструмента.
         </p>
-        <NuxtLink to="/" class="btn">Перейти в систему</NuxtLink>
+        <NuxtLink to="/dashboard" class="btn">Перейти в систему</NuxtLink>
       </div>
       <video class="background-video" width="700" height="500" autoplay muted loop>
         <source src="/graphik.mp4" type="video/mp4" />
