@@ -39,8 +39,7 @@ const submitLogin = async () => {
       router.push("/");
     })
     .catch((e) => {
-      console.error(e);
-      if (e.response && e.response.status === 403) {
+      if (e.response.status === 403) {
         responseStatus.value = "Неверный email или пароль";
       } else {
         responseStatus.value = "Произошла ошибка. Попробуйте позже.";
