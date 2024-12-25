@@ -40,78 +40,70 @@ onMounted(getTransactionsAtLastMonth);
 <style scoped></style> -->
 <script setup>
 import Chart from "chart.js/auto";
-
-definePageMeta({
-  middleware: "auth",
-});
 useSeoMeta({
-  title: "dashboard",
+  title: `dashboard`,
 });
-
+definePageMeta({
+  middleware: `auth`,
+});
+const transactionsStore = useTransactionsStore();
 const axios = useNuxtApp().$axios;
-const monthlyTransactionsStore = useTransactionsStore();
+const chartRef = ref(null);
+
 const currentDate = new Date();
 const currentMonth = currentDate.getMonth() + 1;
 const currentYear = currentDate.getFullYear();
 
-// Создаем ссылку на canvas для диаграммы
-const chartRef = ref(null);
-
-const getTransactionsAtLastMonth = async () => {
+// Получение транзакций
+const getTransactionsByMonth = async () => {
   const token = useCookie("jwtToken");
-  await axios
-    .get("/transaction/getMonthHistory", {
+  try {
+    const response = await axios.get("/transaction/getMonthHistory", {
       headers: { Authorization: `Bearer ${token.value}` },
-      params: {
-        year: currentYear,
-        month: currentMonth,
-      },
-    })
-    .then((response) => {
-      monthlyTransactionsStore.setTransactions(response.data);
-      updateChart(); // Обновляем график после загрузки данных
+      params: { year: currentYear, month: currentMonth },
     });
+    transactionsStore.setTransactions(response.data);
+  } catch (error) {
+    console.error("Ошибка при получении данных:", error);
+  }
 };
 
-const updateChart = () => {
-  // Подготовка данных для круговой диаграммы
-  const data = {
-    labels: ["Credit", "Debit", "Transfer", "Fee"],
+// Общая сумма для каждого типа
+const totalByType = computed(() => {
+  const totals = {};
+  transactionsStore.transactions.forEach((transaction) => {
+    const type = transaction.type; // "CREDIT", "DEBIT", etc.
+    if (!totals[type]) totals[type] = 0;
+    totals[type] += transaction.amount;
+  });
+  return totals;
+});
+
+// Данные для диаграммы
+const chartData = computed(() => {
+  return {
+    labels: Object.keys(totalByType.value).map(
+      (type) => type.charAt(0) + type.slice(1).toLowerCase()
+    ),
     datasets: [
       {
-        data: [
-          monthlyTransactionsStore.countOfType("CREDIT"),
-          monthlyTransactionsStore.countOfType("DEBIT"),
-          monthlyTransactionsStore.countOfType("TRANSFER"),
-          monthlyTransactionsStore.countOfType("FEE"),
-        ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
-        hoverBackgroundColor: ["#FF4384", "#36A2BB", "#FFAD56", "#4BC0B0"],
+        data: Object.values(totalByType.value),
+        backgroundColor: ["#4caf50", "#f44336", "#2196f3", "#ff9800"], // Цвета для типов
       },
     ],
   };
+});
 
-  // Инициализация или обновление графика
-  if (chartRef.value && chartRef.value.chart) {
-    chartRef.value.chart.data = data;
-    chartRef.value.chart.update();
-  } else {
+// Рендер диаграммы
+const renderChart = () => {
+  if (chartRef.value) {
     new Chart(chartRef.value, {
       type: "pie",
-      data: data,
+      data: chartData.value,
       options: {
-        responsive: true,
         plugins: {
           legend: {
-            position: "top",
-          },
-          tooltip: {
-            callbacks: {
-              label: function (tooltipItem) {
-                const value = tooltipItem.raw;
-                return `${tooltipItem.label}: ${value}`;
-              },
-            },
+            position: "bottom",
           },
         },
       },
@@ -119,25 +111,137 @@ const updateChart = () => {
   }
 };
 
-onMounted(() => {
-  nextTick(() => {
-    getTransactionsAtLastMonth();
-  });
+onMounted(async () => {
+  await getTransactionsByMonth();
+  renderChart();
 });
 </script>
 
 <template>
-  <div>
-    <canvas ref="chartRef" width="300" height="300"></canvas>
+  <div class="dashboard">
+    <header class="header">
+      <h1 class="title">Dashboard</h1>
+      <nav class="nav">
+        <nuxt-link to="/profile" class="nav-link">
+          <Icon name="mdi-account" size="24" />
+          Профиль
+        </nuxt-link>
+        <nuxt-link to="/getAll/page-0" class="nav-link">
+          <Icon name="mdi-history" size="24" />
+          Все транзакции
+        </nuxt-link>
+      </nav>
+    </header>
+
+    <section class="overview">
+      <div class="stats">
+        <div class="stat" v-for="(total, type) in totalByType" :key="type">
+          <h3>{{ type.charAt(0) + type.slice(1).toLowerCase() }}</h3>
+          <p class="total">${{ total.toFixed(2) }}</p>
+        </div>
+      </div>
+
+      <div class="chart">
+        <canvas ref="chartRef"></canvas>
+      </div>
+    </section>
+
+    <section class="transactions-list">
+      <h2>Транзакции за месяц</h2>
+      <div class="cards-container">
+        <TransactionCardDashboard
+          v-for="transaction in transactionsStore.transactions"
+          :key="transaction.id"
+          :transaction="transaction"
+        />
+      </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
-canvas {
-  max-width: 500px; 
-  max-height: 500px;
-  min-height: 500px;
-  min-width: 500px;
-  margin: 0 auto; 
+.dashboard {
+  padding: 30px;
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f4f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+}
+
+.nav {
+  display: flex;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #0056b3;
+}
+
+.nav-link Icon {
+  margin-right: 8px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40px;
+}
+
+.stat {
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+}
+
+.stat h3 {
+  font-size: 18px;
+  color: #666;
+}
+
+.total {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.chart {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap; /* Для того, чтобы карточки могли перенести на новую строку */
+  justify-content: center; /* Центрируем карточки по горизонтали */
+  gap: 16px; /* Межкарточный отступ */
+  padding: 0 20px; /* Отступы слева и справа */
+}
+
+.transactions-list h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
 }
 </style>
