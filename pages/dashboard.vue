@@ -30,6 +30,33 @@ const getTransactionsByYearAndMonth = async (reqYear, reqMonth) => {
     console.error("Ошибка при получении данных:", error);
   }
 };
+// change date
+const isNextButtonAble = computed(() => {
+  let now = new Date();
+  if (
+    currentMonth.value == now.getMonth() + 1 &&
+    currentYear.value == now.getFullYear()
+  ) {
+    return false;
+  }
+  return true;
+});
+
+const toNextMonth = () => {
+  currentMonth.value =
+    currentMonth.value + 1 == 13 ? 1 : currentMonth.value + 1;
+  currentYear.value =
+    currentMonth.value == 1 ? currentYear.value + 1 : currentYear.value;
+  getTransactionsByYearAndMonth(currentYear.value, currentMonth.value);
+};
+
+const toPreviosMonth = () => {
+  currentMonth.value =
+    currentMonth.value - 1 == 0 ? 12 : currentMonth.value - 1;
+  currentYear.value =
+    currentMonth.value == 12 ? currentYear.value - 1 : currentYear.value;
+  getTransactionsByYearAndMonth(currentYear.value, currentMonth.value);
+};
 
 // Общая сумма для каждого типа
 const totalByType = computed(() => {
@@ -58,7 +85,7 @@ const chartData = computed(() => {
 });
 
 // Рендер диаграммы
-let chartInstance = null;  // Глобальная переменная для хранения экземпляра диаграммы
+let chartInstance = null; // Глобальная переменная для хранения экземпляра диаграммы
 
 const renderChart = () => {
   // Убедитесь, что canvas существует
@@ -96,6 +123,8 @@ onMounted(async () => {
 </script>
 
 <template>
+  <button @click="toPreviosMonth">previos</button>
+  <button @click="toNextMonth" v-if="isNextButtonAble">next</button>
   <div class="dashboard">
     <header class="header">
       <h1 class="title">Dashboard</h1>
