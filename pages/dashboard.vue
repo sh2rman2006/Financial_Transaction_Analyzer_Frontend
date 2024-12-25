@@ -123,8 +123,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <button @click="toPreviosMonth">previos</button>
-  <button @click="toNextMonth" v-if="isNextButtonAble">next</button>
   <div class="dashboard">
     <header class="header">
       <h1 class="title">Dashboard</h1>
