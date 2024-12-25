@@ -109,6 +109,7 @@ const visiblePages = computed(() => {
         <button @click="goToPageFromInput" class="go-button">Перейти</button>
       </div>
     </div>
+    <NuxtLink to="/dashboard" class="return-link">Вернуться на Dashboard</NuxtLink>
   </div>
 </template>
 
@@ -173,9 +174,35 @@ const visiblePages = computed(() => {
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  &:hover {
+    background-color: #0056b3;
+  }
 }
 
-.go-button:hover {
-  background-color: #0056b3;
+.return-link {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  color: #fff;
+  background-color: #28a745; /* Зеленый цвет */
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: fit-content;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #218838; /* Темно-зеленый при наведении */
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background-color: #1e7e34; /* Еще темнее при клике */
+    transform: scale(0.95);
+  }
 }
 </style>

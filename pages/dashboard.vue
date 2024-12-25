@@ -1,58 +1,20 @@
-<!-- <script setup>
-import Chart from "chart.js/auto";
-
-definePageMeta({
-  middleware: "auth",
-});
-useSeoMeta({
-  title: "dashboard",
-});
-
-const axios = useNuxtApp().$axios;
-const monthlyTransactionsStore = useTransactionsStore();
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth() + 1;
-const currentYear = currentDate.getFullYear();
-
-const getTransactionsAtLastMonth = async () => {
-  const token = useCookie("jwtToken");
-  await axios
-    .get("/transaction/getMonthHistory", {
-      headers: { Authorization: `Bearer ${token.value}` },
-      params: {
-        year: currentYear,
-        month: currentMonth,
-      },
-    })
-    .then((response) => {
-      monthlyTransactionsStore.setTransactions(response.data);
-    });
-};
-
-onMounted(getTransactionsAtLastMonth);
-
-</script>
-
-<template>
-  <div></div>
-</template>
-
-<style scoped></style> -->
 <script setup>
 import Chart from "chart.js/auto";
+
 useSeoMeta({
   title: `dashboard`,
 });
 definePageMeta({
   middleware: `auth`,
 });
+
 const transactionsStore = useTransactionsStore();
 const axios = useNuxtApp().$axios;
 const chartRef = ref(null);
 
-const currentDate = new Date();
-const currentMonth = currentDate.getMonth() + 1;
-const currentYear = currentDate.getFullYear();
+const currentDate = ref(new Date());
+const currentMonth = ref(currentDate.value.getMonth() + 1);
+const currentYear = ref(currentDate.value.getFullYear());
 
 // Получение транзакций
 const getTransactionsByMonthAndYearAndYear = async (reqYear, reqMonth) => {
@@ -63,6 +25,7 @@ const getTransactionsByMonthAndYearAndYear = async (reqYear, reqMonth) => {
       params: { year: reqYear, month: reqMonth },
     });
     transactionsStore.setTransactions(response.data);
+    renderChart();
   } catch (error) {
     console.error("Ошибка при получении данных:", error);
   }
@@ -112,8 +75,7 @@ const renderChart = () => {
 };
 
 onMounted(async () => {
-  await getTransactionsByMonthAndYearAndYear(currentYear, currentMonth);
-  renderChart();
+  await getTransactionsByMonthAndYearAndYear(currentYear.value, currentMonth.value);
 });
 </script>
 
@@ -122,14 +84,14 @@ onMounted(async () => {
     <header class="header">
       <h1 class="title">Dashboard</h1>
       <nav class="nav">
-        <nuxt-link to="/profile" class="nav-link">
+        <NuxtLink to="/profile" class="nav-link">
           <Icon name="mdi-account" size="24" />
           Профиль
-        </nuxt-link>
-        <nuxt-link to="/getAll/page-0" class="nav-link">
+        </NuxtLink>
+        <NuxtLink to="/getAll/page-0" class="nav-link">
           <Icon name="mdi-history" size="24" />
           Все транзакции
-        </nuxt-link>
+        </NuxtLink>
       </nav>
     </header>
 
