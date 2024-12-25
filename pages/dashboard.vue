@@ -17,7 +17,7 @@ const currentMonth = ref(currentDate.value.getMonth() + 1);
 const currentYear = ref(currentDate.value.getFullYear());
 
 // Получение транзакций
-const getTransactionsByMonthAndYearAndYear = async (reqYear, reqMonth) => {
+const getTransactionsByYearAndMonth = async (reqYear, reqMonth) => {
   const token = useCookie("jwtToken");
   try {
     const response = await axios.get("/transaction/getMonthHistory", {
@@ -58,9 +58,23 @@ const chartData = computed(() => {
 });
 
 // Рендер диаграммы
+let chartInstance = null;  // Глобальная переменная для хранения экземпляра диаграммы
+
 const renderChart = () => {
-  if (chartRef.value) {
-    new Chart(chartRef.value, {
+  // Убедитесь, что canvas существует
+  if (!chartRef.value) {
+    console.error("chartRef is not defined or not mounted");
+    return;
+  }
+
+  // Если экземпляр диаграммы существует, уничтожаем его
+  if (chartInstance instanceof Chart) {
+    chartInstance.destroy();
+  }
+
+  // Создаем новый экземпляр диаграммы
+  try {
+    chartInstance = new Chart(chartRef.value, {
       type: "pie",
       data: chartData.value,
       options: {
@@ -71,11 +85,13 @@ const renderChart = () => {
         },
       },
     });
+  } catch (error) {
+    console.error("Ошибка при создании диаграммы:", error);
   }
 };
 
 onMounted(async () => {
-  await getTransactionsByMonthAndYearAndYear(currentYear.value, currentMonth.value);
+  await getTransactionsByYearAndMonth(currentYear.value, currentMonth.value);
 });
 </script>
 
