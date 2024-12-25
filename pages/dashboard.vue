@@ -55,12 +55,12 @@ const currentMonth = currentDate.getMonth() + 1;
 const currentYear = currentDate.getFullYear();
 
 // Получение транзакций
-const getTransactionsByMonth = async () => {
+const getTransactionsByMonthAndYearAndYear = async (reqYear, reqMonth) => {
   const token = useCookie("jwtToken");
   try {
     const response = await axios.get("/transaction/getMonthHistory", {
       headers: { Authorization: `Bearer ${token.value}` },
-      params: { year: currentYear, month: currentMonth },
+      params: { year: reqYear, month: reqMonth },
     });
     transactionsStore.setTransactions(response.data);
   } catch (error) {
@@ -112,7 +112,7 @@ const renderChart = () => {
 };
 
 onMounted(async () => {
-  await getTransactionsByMonth();
+  await getTransactionsByMonthAndYearAndYear(currentYear, currentMonth);
   renderChart();
 });
 </script>
