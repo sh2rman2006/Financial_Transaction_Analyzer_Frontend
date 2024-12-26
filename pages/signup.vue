@@ -23,6 +23,7 @@ const registrationForm = reactive({
 
 const isSubmitBtnDisabled = ref(false);
 
+const isUserAlreadyExist = ref(false);
 const submitRegistration = async () => {
   isSubmitBtnDisabled.value = true;
   await getCsrfToken();
@@ -32,7 +33,13 @@ const submitRegistration = async () => {
         "X-XSRF-TOKEN": csrfToken.value,
       },
     })
-    .then((response) => (isVerifyForm.value = true));
+    .then((response) => (isVerifyForm.value = true))
+    .catch((e) => {
+      if (e.response.status == 409) {
+        isUserAlreadyExist.value = true;
+        isSubmitBtnDisabled.value = false;
+      }
+    });
 };
 // verify
 const isVerifyForm = ref(false);
@@ -138,6 +145,9 @@ const submitVerify = async () => {
         </form>
         <p class="switch-link">
           Уже есть аккаунт? <NuxtLink to="/login">Войти</NuxtLink>
+        </p>
+        <p style="color: red" v-if="isUserAlreadyExist">
+          Пользователь с такой почтой уже зарегистрирован
         </p>
       </div>
 
