@@ -58,6 +58,20 @@ const toPreviosMonth = () => {
   getTransactionsByYearAndMonth(currentYear.value, currentMonth.value);
 };
 
+const monthsMap = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
 // Общая сумма для каждого типа
 const totalByType = computed(() => {
   const totals = {};
@@ -149,6 +163,20 @@ onMounted(async () => {
       <div class="chart">
         <canvas ref="chartRef"></canvas>
       </div>
+
+      <div class="non-info" v-if="transactionsStore.transactions.length == 0">
+        <Icon name="heroicons:inbox-stack" size="48" />
+        <h2>Нет транзакций за этот период</h2>
+      </div>
+
+      <div class="change-date">
+        <button @click="toPreviosMonth">К прошлому</button>
+        <h2>{{ monthsMap[currentMonth - 1] }} {{ currentYear }}</h2>
+        <button @click="toNextMonth" v-show="isNextButtonAble">
+          К следующему
+        </button>
+        <div class="placeholder" v-if="!isNextButtonAble"></div>
+      </div>
     </section>
 
     <section class="transactions-list">
@@ -239,14 +267,70 @@ onMounted(async () => {
 
 .cards-container {
   display: flex;
-  flex-wrap: wrap; /* Для того, чтобы карточки могли перенести на новую строку */
-  justify-content: center; /* Центрируем карточки по горизонтали */
-  gap: 16px; /* Межкарточный отступ */
-  padding: 0 20px; /* Отступы слева и справа */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 20px;
 }
 
 .transactions-list h2 {
   font-size: 24px;
   margin-bottom: 16px;
+}
+
+.change-date {
+  margin: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.change-date > * {
+  text-align: center;
+}
+
+.placeholder {
+  pointer-events: none;
+}
+
+.change-date button {
+  white-space: nowrap;
+  padding: 0.8em 1.2em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.change-date button:hover {
+  background-color: #0056b3;
+}
+
+.change-date button:active {
+  background-color: #002255;
+}
+
+.change-date h2 {
+  font-size: 1.2em;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.change-date h2 {
+  font-size: 1.2em;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.change-date h2 {
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.non-info {
+  text-align: center;
 }
 </style>
