@@ -224,10 +224,10 @@ onMounted(async () => {
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s;
-}
 
-.nav-link:hover {
-  color: #0056b3;
+  &:hover {
+    color: #0056b3;
+  }
 }
 
 .nav-link Icon {
@@ -268,7 +268,7 @@ onMounted(async () => {
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 16px;
   padding: 0 20px;
 }
@@ -303,14 +303,14 @@ onMounted(async () => {
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 1rem;
-}
 
-.change-date button:hover {
-  background-color: #0056b3;
-}
+  &:hover {
+    background-color: #0056b3;
+  }
 
-.change-date button:active {
-  background-color: #002255;
+  &:active {
+    background-color: #002255;
+  }
 }
 
 .change-date h2 {

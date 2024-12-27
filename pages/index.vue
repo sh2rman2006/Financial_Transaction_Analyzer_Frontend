@@ -18,7 +18,14 @@ useSeoMeta({
         </p>
         <NuxtLink to="/dashboard" class="btn">Перейти в систему</NuxtLink>
       </div>
-      <video class="background-video" width="700" height="500" autoplay muted loop>
+      <video
+        class="background-video"
+        width="700"
+        height="500"
+        autoplay
+        muted
+        loop
+      >
         <source src="/graphik.mp4" type="video/mp4" />
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
@@ -110,11 +117,11 @@ useSeoMeta({
   border-radius: 25px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, color 0.3s ease;
-}
 
-.hero .btn:hover {
-  background-color: #007bff;
+  &:hover {
+    background-color: #007bff;
   color: white;
+  }
 }
 
 .background-video {
@@ -153,27 +160,31 @@ useSeoMeta({
   width: 250px;
   text-align: center;
   padding: 20px;
-  background-color: #f4f7fc;
+  background-color: #e3f2fd;
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  border: 2px solid #90caf9;
+  }
 }
 
-.feature:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-}
 
 .feature h3 {
   font-size: 22px;
   margin-top: 20px;
   font-weight: 600;
+  color: #0d47a1;
 }
 
 .feature p {
   font-size: 16px;
   margin-top: 10px;
-  color: #555;
+  color: #37474f;
 }
 
 .footer {
@@ -188,5 +199,4 @@ useSeoMeta({
   font-size: 14px;
   margin: 0;
 }
-
 </style>
