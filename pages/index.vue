@@ -120,7 +120,7 @@ useSeoMeta({
 
   &:hover {
     background-color: #007bff;
-  color: white;
+    color: white;
   }
 }
 
@@ -168,11 +168,10 @@ useSeoMeta({
 
   &:hover {
     transform: translateY(-10px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-  border: 2px solid #90caf9;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border: 2px solid #90caf9;
   }
 }
-
 
 .feature h3 {
   font-size: 22px;
