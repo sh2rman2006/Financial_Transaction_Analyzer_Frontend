@@ -179,7 +179,10 @@ onMounted(async () => {
       </div>
     </section>
 
-    <section class="transactions-list">
+    <section
+      class="transactions-list"
+      v-if="transactionsStore.transactions.length > 0"
+    >
       <h2>Транзакции за месяц</h2>
       <div class="cards-container">
         <TransactionCardDashboard
