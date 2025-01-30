@@ -156,7 +156,7 @@ onMounted(async () => {
       <div class="stats">
         <div class="stat" v-for="(total, type) in totalByType" :key="type">
           <h3>{{ type.charAt(0) + type.slice(1).toLowerCase() }}</h3>
-          <p class="total">${{ total.toFixed(2) }}</p>
+          <p class="total">${{ Math.round(total.toFixed(2)) }}</p>
         </div>
       </div>
 
